@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#030304">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='5' y='5' width='6' height='6' fill='%23fff'/%3E%3C/svg%3E">
+  <title>Marco Silva — Portafolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script>
+    // La entrada (el cubo) se marca antes del primer pintado: sin parpadeos ni transiciones al cargar
+    if (!/[?&](skip|intro|p)\b/.test(location.search)) {
+      history.scrollRestoration = 'manual';
+      document.documentElement.classList.add('is-intro');
+    }
+  </script>
+</head>
+<body>
+  <div id="root" class="root">
+
+    <!-- Escenario WebGL: fijo mientras se recorre la página -->
+    <div class="stage" id="stage" aria-hidden="true">
+      <canvas id="gl" class="gl"></canvas>
+      <div class="fade-bottom"></div>
+    </div>
+
+    <!-- Entrada: el cubo -->
+    <div class="intro" id="intro">
+      <p class="sign">
+        <span class="sign-a">Marco Silva</span>
+        <span class="sign-b">Portafolio · CDMX</span>
+      </p>
+      <button type="button" class="btn btn--glass" id="intro-open">
+        <span>Abrir</span>
+        <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+      </button>
+      <p class="intro-hint">o desliza para entrar</p>
+    </div>
+
+    <!-- Vista de detalle de un proyecto -->
+    <section class="detail" id="detail" role="dialog" aria-modal="true" aria-labelledby="detail-title" aria-hidden="true">
+      <div class="detail-bar">
+        <button type="button" class="back" id="detail-back">
+          <span class="back-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg>
+          </span>
+          <span class="back-text">
+            <span class="back-label">Volver al recorrido</span>
+            <span class="back-sub">Archivo · 01 de 03</span>
+          </span>
+          <kbd class="back-key" aria-hidden="true">Esc</kbd>
+        </button>
+      </div>
+      <div class="detail-grid">
+        <div class="detail-media">
+          <video id="detail-video" src="/media/nexo.mp4" muted loop playsinline controls preload="none"></video>
+        </div>
+        <div class="detail-panel">
+          <p class="label rv">Proyecto 01 · Aplicación</p>
+          <h2 class="title rv" id="detail-title">Nexo</h2>
+          <p class="lead rv">Un espacio de conocimiento personal.</p>
+          <p class="body rv">Nexo reúne en un mismo vault tus fuentes (páginas web y PDFs), tus notas y tus conversaciones con IA, y las conecta en un grafo interactivo para que veas cómo se relaciona todo lo que sabes.</p>
+          <ul class="features">
+            <li class="rv"><span class="features-name">Grafo de conocimiento</span><span class="features-text">Fuentes, notas y temas conectados en un mapa que puedes explorar en global o en local.</span></li>
+            <li class="rv"><span class="features-name">Cuaderno de fuentes</span><span class="features-text">Enlaces web y PDFs que se leen y resumen para tenerlos siempre en contexto.</span></li>
+            <li class="rv"><span class="features-name">Notas como cartas</span><span class="features-text">Notas y listas que se abren, se apilan y se ordenan sobre el lienzo.</span></li>
+            <li class="rv"><span class="features-name">Claude Code integrado</span><span class="features-text">Un asistente que trabaja con el contexto del vault y guarda sus respuestas en el grafo.</span></li>
+          </ul>
+          <dl class="meta rv">
+            <div><dt>Año</dt><dd>[Año]</dd></div>
+            <div><dt>Rol</dt><dd>[Tu rol]</dd></div>
+            <div><dt>Stack</dt><dd>[Stack]</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- Indicador junto al cursor sobre una carta clicable -->
+    <div class="cursor-hint" id="cursor-hint" aria-hidden="true">
+      <span>Ver proyecto</span>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg>
+    </div>
+
+    <!-- HUD -->
+    <header class="hud">
+      <a href="#escena-1" class="hud-brand">
+        <span class="hud-mark" aria-hidden="true"></span>
+        <span class="sign">
+          <span class="sign-a">Marco Silva</span>
+          <span class="sign-b">Portafolio · CDMX</span>
+        </span>
+      </a>
+    </header>
+    <div class="progress" aria-hidden="true"><div class="progress-bar" id="bar"></div></div>
+
+    <!-- Contenido: 4 escenas. data-rv marca cada bloque que aparece por turnos -->
+    <main class="content">
+      <section id="escena-1" class="sec">
+        <div class="pin pin--left">
+          <div class="copy copy--hero" data-copy="0">
+            <h1 class="display" data-rv><span class="mask"><span class="mask-in">Marco Silva</span></span></h1>
+            <div class="row" data-rv>
+              <p class="lead">[Tu rol] · CDMX</p>
+              <p class="body">[Una frase que diga qué construyes y para quién.]</p>
+            </div>
+            <div class="hint" data-rv>
+              <span class="hint-track" aria-hidden="true"><span class="hint-line"></span></span>
+              <span>Desliza para entrar</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="escena-2" class="sec">
+        <div class="pin pin--right">
+          <div class="copy copy--right" data-copy="1">
+            <p class="label" data-rv>Perfil</p>
+            <h2 class="title" data-rv><span class="mask"><span class="mask-in">Sobre mí</span></span></h2>
+            <p class="body" data-rv>[Dos o tres líneas sobre ti: de dónde vienes, qué te mueve y cómo trabajas.]</p>
+            <ul class="tags" data-rv>
+              <li>[Disciplina 01]</li>
+              <li>[Disciplina 02]</li>
+              <li>[Disciplina 03]</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="escena-3" class="sec">
+        <div class="pin pin--left">
+          <div class="copy copy--archive" data-copy="2">
+            <p class="label" data-rv>Archivo · 03 proyectos</p>
+            <h2 class="title" data-rv><span class="mask"><span class="mask-in">Proyectos</span></span></h2>
+            <p class="body" data-rv>[Una línea que presente tu trabajo seleccionado.]</p>
+            <ol class="index" aria-label="Proyectos">
+              <li data-rv>
+                <button type="button" class="index-row" data-project="0">
+                  <span class="index-num">01</span>
+                  <span class="index-main">
+                    <span class="index-name">Nexo</span>
+                    <span class="index-desc">Espacio de conocimiento personal</span>
+                  </span>
+                  <span class="index-go">
+                    Ver
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg>
+                  </span>
+                </button>
+              </li>
+              <li data-rv>
+                <button type="button" class="index-row" data-project="1" aria-disabled="true">
+                  <span class="index-num">02</span>
+                  <span class="index-main">
+                    <span class="index-name">[Proyecto 02]</span>
+                    <span class="index-desc">Próximamente</span>
+                  </span>
+                </button>
+              </li>
+              <li data-rv>
+                <button type="button" class="index-row" data-project="2" aria-disabled="true">
+                  <span class="index-num">03</span>
+                  <span class="index-main">
+                    <span class="index-name">[Proyecto 03]</span>
+                    <span class="index-desc">Próximamente</span>
+                  </span>
+                </button>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <section id="escena-4" class="sec sec--last">
+        <div class="pin pin--center">
+          <div class="copy copy--center" data-copy="3">
+            <p class="label" data-rv>Contacto</p>
+            <h2 class="display" data-rv><span class="mask"><span class="mask-in">Hablemos</span></span></h2>
+            <p class="body" data-rv>[Para qué tipo de proyectos estás disponible.]</p>
+            <a href="mailto:" class="btn btn--glass" data-rv>
+              <span>[tu@correo.com]</span>
+              <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg>
+            </a>
+            <p class="links" data-rv>[GitHub] · [LinkedIn] · [Otra red]</p>
+            <p class="sign sign--foot" data-rv>
+              <span class="sign-a">© 2026 Marco Silva</span>
+              <span class="sign-b">Todos los derechos reservados</span>
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
